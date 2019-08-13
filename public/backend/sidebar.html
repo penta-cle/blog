@@ -1,0 +1,64 @@
+<!-- Begin page -->
+<div id="wrapper">
+
+    <!-- ========== Left Sidebar Start ========== -->
+    <div class="left-side-menu">
+
+        <div class="slimscroll-menu">
+
+            <!-- LOGO -->
+            <a href="index.html" class="logo text-center mb-4">
+                <span class="logo-lg">
+                    <img src="/static/assets/images/logo.png" alt="" height="20">
+                </span>
+                <span class="logo-sm">
+                    <img src="/static/assets/images/logo-sm.png" alt="" height="24">
+                </span>
+            </a>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+
+                <ul class="metismenu" id="side-menu">
+
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-folder-plus"></i>
+                            <span> 文章管理</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level nav" aria-expanded="false">
+                            <li>
+                                <a href="{:url('Articles/select')}">文章详情</a>
+                            </li>
+                            <li>
+                                <a href="{:url('Fenleis/select')}">文章分类</a>
+                            </li>
+                            <li>
+                                <a href="javascript: void(0);" aria-expanded="false">文章排名
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul class="nav-third-level nav" aria-expanded="false">
+                                    <li>
+                                        <a href="{:url('Fenleis/pinglun_three')}">评论前三名</a>
+                                    </li>
+                                    <li>
+                                        <a href="{:url('Fenleis/dianzan_three')}">点赞前三名</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </div>
+            <!-- End Sidebar -->
+
+            <div class="clearfix"></div>
+
+        </div>
+        <!-- Sidebar -left -->
+
+    </div>
+    <!-- Left Sidebar End -->

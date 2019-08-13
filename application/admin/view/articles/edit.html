@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+{include file="./backend/header.html"}
+
+<body>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <form action="{:url('update_article')}" method="post">
+                            <input type="text" name="id" hidden value="{$Article['id']}">
+                            <input type="text" name="apic" hidden id="cover" value="{$Article['apic']}">
+                            <div class="page-wrap">
+
+                                <section class="page-hd">
+                                    <header>
+                                        <h2 class="title">编辑文章</h2>
+                                    </header>
+                                    <hr>
+                                </section>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">文章标题：</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="atitle"
+                                            value="{$Article['atitle']}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">封面图：</label>
+                                    <div class="col-sm-10">
+                                        <input class="btn btn-secondary selectImage file" id="selectImage"
+                                            type="file" />
+                                        <img style="width: 100px;" class="cover" src="{$Article['apic']}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">发布人：</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="aname"
+                                            value="{$Article['aname']}">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">文章详情</label>
+                                    <div class="col-sm-10">
+                                        <div id="agreement"  style="width: 680px;">{$Article['atext']}</div>
+                                        <textarea id="text1" hidden name="atext" value=""></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-0 justify-content-end row">
+                                    <div class="col-9">
+                                        <input type="submit" class="btn btn-outline-info" value="提交" />
+                                    </div>
+                                </div>
+
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            $(".selectImage").change(function (e) {
+                //如果有选择图片则上传图片
+                var files = e.target.files || e.dataTransfer.files;
+                var formData = new FormData();
+                if (files.length > 0) {
+                    formData.append('imgs[]', files[0]);
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '{:url("Index/uploads")}');
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            let resstr = xhr.responseText;
+                            let resp = JSON.parse(resstr);
+                            //console.log('上传成功:',resp.path);
+                            //处理其他数据，这里根据需要进行调整
+                            let imgepath = resp.path[0]; //组装数组
+                            $("#cover").val(imgepath);//设置为组装后的图片数组
+                            $(".cover").attr("src", imgepath);
+                        }
+                    };
+                    xhr.send(formData);
+                }
+            });
+            //富文本
+            var E = window.wangEditor;
+            var editor = new E('#agreement');
+            var $text1 = $('#text1');
+            editor.customConfig.onchange = function (html) {
+                // 监控变化，同步更新到 textarea
+                $text1.val(html)
+            };
+            // 自定义菜单配置
+            editor.customConfig.menus = [
+                'undo',  // 撤销
+                'redo',  // 重复
+                'head',  // 标题
+                'bold',  // 粗体
+                'italic',  // 斜体
+                'underline',  // 下划线
+                'strikeThrough',  // 删除线
+                'list',  // 列表
+                'justify',  // 对齐方式
+                'quote',  // 引用
+                'image',  // 插入图片
+                'table',  // 表格
+                'code',  // 插入代码
+            ];
+            // 配置服务器端图片上传地址
+            editor.customConfig.uploadImgServer = '{:url("index/upload")}';
+            editor.customConfig.uploadFileName = 'imgs[]';
+            editor.customConfig.debug = true;
+            editor.create();
+
+            // 初始化 textarea 的值
+            $text1.val(editor.txt.html())
+        </script>
+
+</body>
+
+</html>
