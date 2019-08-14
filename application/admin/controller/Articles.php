@@ -101,21 +101,21 @@ class Articles extends Controller
     }
 
 //    //文章搜索功能
-//    public function Search()
-//    {
-//        $key = input('key');
-//        $list = Article::SearchArticle($key);
-//        $fenleis = Fenlei::all();
-//        $this->assign([
-//            "list" => $list,
-//            "apic" => Article::all(),
-//            "aname" => Article::all(),
-//            "atitle" => Article::all(),
-//            "fname" => $fenleis,
-//            "id" => Article::all(),
-//        ]);
-//        return $this->fetch("list");
-//    }
+    public function Search()
+    {
+        $key = input('key');
+        $list = Article::SearchArticle($key);
+        $fenleis = Fenlei::all();
+        $this->assign([
+            "list" => $list,
+            "apic" => Article::all(),
+            "aname" => Article::all(),
+            "atitle" => Article::all(),
+            "fenlei" => $fenleis,
+            "id" => Article::all(),
+        ]);
+        return $this->fetch("list");
+    }
 
 
     //查看文章详情
@@ -204,5 +204,20 @@ class Articles extends Controller
             return $this->success("删除成功");
         else if ($res == NULL)
             return $this->error("删除失败！");
+    }
+    //推荐是否开启
+    public function recommend(){
+        if(!input("?id"))
+            return $this->error("系统发生错误！");
+        $id = input("id");
+        $recommend = Article::find($id);
+        $recommend->state = $recommend->state==1?0:1;
+        $this->assign([
+            "recommend"=>$recommend
+        ]);
+        $recommend->save();
+
+        return result(0);
+
     }
 }

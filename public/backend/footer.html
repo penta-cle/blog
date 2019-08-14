@@ -39,6 +39,24 @@
 <script src="/static/js/vendor/jquery.knob.min.js"></script>
 
 <script src="/static/js/pages/dashboard.init.js"></script>
+<!-- 按钮js文件-->
+<script src="/static/js/vendor/switchery.min.js"></script>
+<script src="/static/js/vendor/bootstrap-maxlength.min.js"></script>
+<script src="/static/js/pages/form-advanced.init.js"></script>
 
 <script src="/static/js/index.js"></script>
 <script src="/static/js/jquery.min.js"></script>
+
+<script> /* 此处为添加开关按钮，假设script必须写在footer之中*/
+    /**
+     * 修改Article推荐状态
+     */
+    $(".state").change(function (event) {
+        let _id = $(this).parents(".cen").attr('id');
+        $.ajax({
+            url: "{:url('/index.php/admin/Articles/recommend')}?id=" + _id,
+            success(res, state) {
+            }
+        });
+    });
+</script>
