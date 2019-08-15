@@ -58,7 +58,7 @@ class Articles extends Controller
     //查询文章介绍信息
     public function select()
     {
-        $list = Article::order('state desc')->paginate(10, false, ['query' => request()->param()]);
+        $list = Article::order('id desc')->paginate(10, false, ['query' => request()->param()]);
         $this->assign([
             "list" => $list,
             "apic" => Article::all(),
@@ -205,6 +205,17 @@ class Articles extends Controller
         else if ($res == NULL)
             return $this->error("删除失败！");
     }
+
+    //批量删除
+    public function delAllCategory(){
+        $id=input("id/a");
+        //方法一
+        $id = implode(",",$id) ;
+//        $data=Article::where("id in ($id)")->destory();  //warning: 直接删除！！
+        //方法二
+        $data=Article::destroy($id); //软删除
+        exit(json_encode($data));
+    }
     //推荐是否开启
     public function recommend(){
         if(!input("?id"))
@@ -216,7 +227,6 @@ class Articles extends Controller
             "recommend"=>$recommend
         ]);
         $recommend->save();
-
         return result(0);
 
     }

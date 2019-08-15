@@ -220,10 +220,19 @@
 
 
                 <div class="ribbon ribbon-dark">文章介绍</div>
+                <a class="btn btn-outline-danger" onclick="datadel()" href="javascript:;"
+                   style="float: right;margin-right: 2px;">批量删除</a>
                 <div class="table-responsive mt-3">
                     <table class="table mb-0">
                         <thead class="thead-light">
                         <tr>
+                            <th width="1%">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input checkall" id="customCheck1">
+                                    <label class="custom-control-label" for="customCheck1"></label>
+                                </div>
+                            </th>
+                            <!--<th width="1%"><input class="checkall" type="checkbox"/></th>-->
                             <th width="1%">id</th>
                             <th width="3%">文章标题</th>
                             <th width="5%">封面图</th>
@@ -238,9 +247,15 @@
                         </tr>
                         </thead>
                         <tbody>
-
                         {foreach $list as $item}
                         <tr class="cen" id="{$item->id}">  <!--按钮开关需要在此指定id-->
+                            <td><input class="checkone" type="checkbox" name="id" value="{$item['id']}"/></td>
+                            <!--<td>-->
+                                <!--<div class="custom-control custom-checkbox">-->
+                                    <!--<input class="custom-control-input checkone" type="checkbox" name="id" value="{$item['id']}" id="customCheck2"/>-->
+                                    <!--<label class="custom-control-label" for="customCheck2"></label>-->
+                                <!--</div>-->
+                            <!--</td>-->
                             <td>{$item->id}</td>
                             <td>{$item->atitle}</td>
                             <td style="width: 130px;">
@@ -251,30 +266,22 @@
                             <td>{$item->allpinglun}</td>
                             <td>{$item->fenlei}</td>
                             <td>
-
                                 <input class="state" type="checkbox" data-plugin="switchery"
                                        data-color="#039cfd" hidden {$item['state']==1? 'checked="checked"' : ''}>
-
                             </td>
                             <td>{$item->create_time}</td>
                             <td>{$item->update_time}</td>
                             <td>
                                 <a title="编辑" class="edit" _id="{$item->id}" href="#">编辑</a>
-
                                 <a title="删除" class="delete" _id="{$item->id}" href="#">删除</a>
-
-                                <!--<button type="button" tabindex="0" class="btn btn-primary waves-effect waves-light"-->
-                                <!--data-toggle="popover" data-trigger="focus" title=""-->
-                                <!--data-content="{$item->atext}" data-original-title="查看详情">-->
-                                <!--查看详情-->
-                                <!--</button>-->
                             </td>
+
                         </tr>
                         {/foreach}
 
                         </tbody>
                     </table>
-
+                    {$list->render()}
                 </div>
             </div>
         </div>
@@ -349,7 +356,7 @@
             content: '{:url("Articles/edit")}?id=' + id
         });
     });
-//删除方法
+    //删除方法
     $('.delete').click(function () {
         let id = this.getAttribute("_id");
         layer.confirm('确认删除此内容？', {
@@ -367,9 +374,49 @@
                 }
             );
         }, function () {
-
         });
     });
+
+    //批量删除
+    function datadel(obj) {
+        layer.confirm('确认要批量删除吗？', function (index) {
+            var id = new Array();
+            $('input[name="id"]:checked').each(function () {
+                id.push($(this).val());//向数组中添加元素
+            });
+            $.post(
+                "{:url('/index.php/admin/Articles/delAllCategory')}",
+                {id: id},
+                function (dat) {
+                    if (dat) {
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!', {icon: 1, time: 1000});
+                        document.location.reload();//当前页面
+                    } else {
+                        var msg = dat.msg;
+                        layer.msg(msg, {icon: 2, time: 2000});
+                    }
+                });
+        });
+    }
+
+    //全部选择
+    $(".checkall").click(function () {
+        if ($(this).is(':checked')) {
+            // 全选
+            $(".checkone").each(function () {
+                //$(this).attr('checked',true);// 此种方法第二次就失效
+                $(this).get(0).checked = true;// 转换为dom对象
+            })
+        } else {
+            // 反选
+            $(".checkone").each(function () {
+                //$(this).attr('checked',false);
+                $(this).get(0).checked = false;
+            })
+        }
+    });
+
     //下拉菜单搜索方法
     $("#my-menu").change(function (e) {
         console.log(e.currentTarget.value);
@@ -378,6 +425,20 @@
         let path = "{:url('getByName')}?name=" + selected + "&action=" + action;
         window.location.href = (path);
     });
+
+    /* 此处为添加开关按钮，假设script必须写在footer之中*/
+    /**
+     * 修改Article推荐状态
+     */
+    $(".state").change(function (event) {
+        let _id = $(this).parents(".cen").attr('id');
+        $.ajax({
+            url: "{:url('/index.php/admin/Articles/recommend')}?id=" + _id,
+            success(res, state) {
+            }
+        });
+    });
+
 </script>
 {include file="./backend/footer.html"}
 

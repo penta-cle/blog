@@ -47,16 +47,20 @@
 <script src="/static/js/index.js"></script>
 <script src="/static/js/jquery.min.js"></script>
 
-<script> /* 此处为添加开关按钮，假设script必须写在footer之中*/
-    /**
-     * 修改Article推荐状态
-     */
-    $(".state").change(function (event) {
-        let _id = $(this).parents(".cen").attr('id');
-        $.ajax({
-            url: "{:url('/index.php/admin/Articles/recommend')}?id=" + _id,
-            success(res, state) {
-            }
-        });
-    });
-</script>
+<!-- third party js -->
+<script src="/static/js/vendor/jquery.dataTables.js"></script>
+<script src="/static/js/vendor/dataTables.bootstrap4.js"></script>
+<script src="/static/js/vendor/dataTables.responsive.min.js"></script>
+<script src="/static/js/vendor/responsive.bootstrap4.min.js"></script>
+<script src="/static/js/vendor/dataTables.buttons.min.js"></script>
+<script src="/static/js/vendor/buttons.bootstrap4.min.js"></script>
+<script src="/static/js/vendor/buttons.html5.min.js"></script>
+<script src="/static/js/vendor/buttons.flash.min.js"></script>
+<script src="/static/js/vendor/buttons.print.min.js"></script>
+<script src="/static/js/vendor/dataTables.keyTable.min.js"></script>
+<script src="/static/js/vendor/dataTables.select.min.js"></script>
+<!-- third party js ends -->
+
+<!-- demo app -->
+<script src="/static/js/pages/datatables.init.js"></script>
+<!-- end demo js-->
