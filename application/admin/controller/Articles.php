@@ -58,7 +58,7 @@ class Articles extends Controller
     //查询文章介绍信息
     public function select()
     {
-        $list = Article::order('id desc')->paginate(10, false, ['query' => request()->param()]);
+        $list = Article::order('state desc')->paginate(10, false, ['query' => request()->param()]);
         $this->assign([
             "list" => $list,
             "apic" => Article::all(),
@@ -75,7 +75,7 @@ class Articles extends Controller
     {
         $name = input("name");
         if ($name == "all") {
-            $all = Article::order('id desc')->paginate(10, false, ['query' => request()->param()]);
+            $all = Article::order('state desc')->paginate(10, false, ['query' => request()->param()]);
             $fenleis = Fenlei::all();
             $this->assign([
                 "list" => $all,
